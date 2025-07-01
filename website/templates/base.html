@@ -1,92 +1,118 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-    <head>
-       <meta charset="UTF-8"/> 
-       <meta name="viewport" content="width=device-width, initial-scale=1" /> 
-       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"/>
-        <title>{% block title %}Home{% endblock %}</title>
-    </head>
-    <body>   
-        <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="/">
-                <img src="{{ url_for('static', filename='images/UPMlogo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="Logo">
-                Student complaints
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" >
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<html lang="{{ 'ar' if lang == 'ar' else 'en' }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
+  <title>{% block title %}Home{% endblock %}</title>
 
-            <div class="collapse navbar-collapse" id="navbar">
-                <ul class="navbar-nav ml-auto d-flex flex-row-reverse">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item px-2"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item px-2"><a class="nav-link" href="/logout">Logout</a></li>
-                    {% else %}
-                    <li class="nav-item px-2"><a class="nav-link" href="/login">Login</a></li>
-                    <li class="nav-item px-2"><a class="nav-link" href="/sign-up">Sign Up</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </nav>
-
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for category, messages in messages %}
-                    {% if category== 'error' %}
-                        <div class="alert alert-danger alter-dismissable fade show" role="alert">
-                            {{ messages }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-success alter-dismissable fade show" role="alert">
-                            {{ messages }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <div class="container">{% block content %} {% endblock %}</div>
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-    </body>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIK3UENzmM7KCkRr/rE9/Qpg6aAGF9FDMVNA/GpGFF93hXpG5KkNct" crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7HUbX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous">
-        
-    </script>
-        <script>
-      const textarea = document.getElementById("note");
-      textarea.addEventListener('input', function () {
-        this.style.height = "auto";
-        this.style.height = (this.scrollHeight) + "px";
-      });
-    </script>
-    
-    <script>
-    function deleteNote(noteId) {
-        fetch('/delete-note', {
-            method: 'POST',
-            body: JSON.stringify({ noteId: noteId }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((_res) => {
-            window.location.href = "/";
-        });
+  <style>
+    .language-selector img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      border-radius: 50%;
     }
-    </script>
+
+    .language-options {
+      display: none;
+      position: absolute;
+      top: 35px;
+      background: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      min-width: 100px;
+      z-index: 1000;
+    }
+
+    .language-options a {
+      color: black;
+      padding: 6px 10px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .language-options a:hover {
+      background-color: #000;
+      color: white;
+    }
+
+    .language-selector:hover .language-options {
+      display: block;
+    }
+
+    .gap-2 {
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Bar-->
+<nav class="navbar navbar-light bg-light d-flex justify-content-between align-items-center px-3" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+
+  {% if lang == 'ar' %}
+    <!-- Logo direction (Arabic\right) -->
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <img src="{{ url_for('static', filename='images/UPMlogo.png') }}" width="30" height="30" class="d-inline-block align-top" style="margin-left: 10px;" alt="Logo">
+      <span>شكاوى الطلاب</span>
+    </a>
+  {% else %}
+    <!-- Logo direction (En\left)-->
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <img src="{{ url_for('static', filename='images/UPMlogo.png') }}" width="30" height="30" class="d-inline-block align-top mr-2" alt="Logo">
+      <span>Student complaints</span>
+    </a>
+  {% endif %}
+
+  <!-- Lang icon and squer button -->
+  <div class="d-flex align-items-center gap-2">
+    <div class="language-selector position-relative">
+      <img src="{{ url_for('static', filename='images/languageIcon.svg') }}" alt="Language">
+      <div class="language-options" style="right: 0;">
+        <a href="?lang=ar">العربية</a>
+        <a href="?lang=en">English</a>
+      </div>
+    </div>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+
+  <!-- Links-->
+  <div class="collapse navbar-collapse" id="navbar">
+    <ul class="navbar-nav ml-auto d-flex flex-row-reverse">
+      {% if user.is_authenticated %}
+        <li class="nav-item px-2"><a class="nav-link" href="/">{{ 'الرئيسية' if lang == 'ar' else 'Home' }}</a></li>
+        <li class="nav-item px-2"><a class="nav-link" href="/logout">{{ 'تسجيل الخروج' if lang == 'ar' else 'Logout' }}</a></li>
+      {% else %}
+        <li class="nav-item px-2"><a class="nav-link" href="/login">{{ 'تسجيل الدخول' if lang == 'ar' else 'Login' }}</a></li>
+        <li class="nav-item px-2"><a class="nav-link" href="/sign-up">{{ 'إنشاء حساب' if lang == 'ar' else 'Sign Up' }}</a></li>
+      {% endif %}
+    </ul>
+  </div>
+
+</nav>
+
+<!-- Messages-->
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    {% for category, msg in messages %}
+      <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+        {{ msg }}
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="container">{% block content %}{% endblock %}</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+</body>
 </html>
