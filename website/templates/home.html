@@ -1,6 +1,6 @@
 
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}{{ 'الصفحة الرئيسية' if lang == 'ar' else 'Home' }}{% endblock %}
 
 {% block content %} 
 
@@ -18,7 +18,7 @@
     }
 </script>
 
-<h1 align="center">Notes</h1>
+<h1 align="center">{{ ' الشكوى ' if lang == 'ar' else 'The Complaint' }}</h1>
 <ul class="list-group list-group-flush" id="notes">
     {% for note in user.notes %}
     <li class="list-group-item">
@@ -42,13 +42,13 @@
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
             cursor: pointer;
-            width: 100%; /* Fully*/
+            width: 100%; /* fully */
             transition: background-color 0.3s ease;
         }
 
         .btn-black:hover,
         .btn-black:focus {
-            background-color: #808080 !important; /*  Darker when passing */
+            background-color: #808080 !important; /* be light when I touch it */
             color: white !important;
             outline: none;
         }
@@ -70,7 +70,7 @@
     </style>
 
     <!-- Text-->
-    <textarea id="note" name="note" rows="2" placeholder="Write your complaints here..." 
+    <textarea id="note" name="note" rows="2" placeholder="{{ 'اكتب شكواك هنا...' if lang == 'ar' else 'Write your complaints here...' }}" 
     class="form-control flex-grow-1" style="resize:none; min-height:50px; max-height:150px; overflow-y:auto; border: none; box-shadow: none;"></textarea>
 
     <!-- Upload -->
@@ -84,7 +84,7 @@
 
     <!-- Button -->
     
-      <button type="submit" class=" btn-black"  style="padding: 6px 20px; font-size: 16px;" >Send</button>
+      <button type="submit" class=" btn-black"  style="padding: 6px 20px; font-size: 16px;" >{{ 'إرسال' if lang == 'ar' else 'Send' }}</button>
     </div>
   </div>
 </form>
