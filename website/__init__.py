@@ -49,8 +49,9 @@ def create_app():
         create_database(app)
 
     @babel.localeselector
-    def get_locale():
-        return request.accept_languages.best_match(app.config['BABEL_SUPPORTED_LOCALES'])
+def get_locale():
+    return request.args.get('lang') or 'en'
+
 
     @app.route('/')
     def home():
