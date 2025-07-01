@@ -19,11 +19,10 @@ def create_app():
 
     @Login_manager.user_loader
     def load_user(id):
-        from .models import User
         return User.query.get(int(id))
 
     #Blueprints login
-    from .models import Note
+    from .models import User
     from .views import views
     from .auth import auth
 
@@ -36,7 +35,6 @@ def create_app():
        
     @Login_manager.user_loader
     def load_user(id):
-        from .models import User
         return User.query.get(int(id))
         
     return app
