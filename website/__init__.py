@@ -48,7 +48,7 @@ def create_app():
         db.create_all()
         create_database(app)
 
-    @babel.locale_selector
+    @babel.localeselector 
     def get_locale():
         return request.args.get('lang') or 'en'
 
