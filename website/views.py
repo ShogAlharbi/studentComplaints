@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, session, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Note
 from . import db
@@ -6,6 +6,14 @@ import json
 
 
 views = Blueprint('views', __name__)
+
+@views.before_app_request
+def detect_lang():
+    lang = request.args.get('lang')
+    if lang in ['ar', 'en']:
+        session['lang'] = lang
+    elif 'lang' not in session:
+        session['lang'] = 'en'
 
 @views.route('/', methods=["GET", 'POST'])
 @login_required
@@ -20,8 +28,8 @@ def home():
             db.session.add(new_note)
             db.session.commit()
             flash('note added!', category= 'success')
-
-    return render_template("home.html", user= current_user)
+    lang = session.get('lang', 'en')
+    return render_template("home.html", user= current_user, lang=lang)
 
 @views.route('/delete-note', methods=['POST'])
 @login_required
@@ -35,5 +43,5 @@ def delete_note():
             db.session.commit()
             return jsonify({'success': True})
     return jsonify({'success': False}), 403
-###########'success': False == error??????
+###########'success': False == error
 
