@@ -27,7 +27,7 @@ def create_app():
     babel.init_app(app)
     db.init_app(app)
 
-#Set up login
+    #Set up login
     Login_manager= LoginManager()
     Login_manager.login_view = 'auth.login'
     Login_manager.init_app(app)
@@ -36,7 +36,7 @@ def create_app():
     def load_user(id):
         from .models import User
         return User.query.get(int(id))
- #Blueprints login
+     #Blueprints login
     from .models import Note
     from .views import views
     from .auth import auth
