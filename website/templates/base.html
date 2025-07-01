@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+    <head>
+       <meta charset="UTF-8"/> 
+       <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"/>
+        <title>{% block title %}Home{% endblock %}</title>
+    </head>
+    <body>   
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Student complaints</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav ml-auto d-flex flex-row-reverse">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item px-2"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="/logout">Logout</a></li>
+                    {% else %}
+                    <li class="nav-item px-2"><a class="nav-link" href="/login">Login</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="/sign-up">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, messages in messages %}
+                    {% if category== 'error' %}
+                        <div class="alert alert-danger alter-dismissable fade show" role="alert">
+                            {{ messages }}
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success alter-dismissable fade show" role="alert">
+                            {{ messages }}
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="container">{% block content %} {% endblock %}</div>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    </body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIK3UENzmM7KCkRr/rE9/Qpg6aAGF9FDMVNA/GpGFF93hXpG5KkNct" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7HUbX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script>
+    function deleteNote(noteId) {
+        fetch('/delete-note', {
+            method: 'POST',
+            body: JSON.stringify({ noteId: noteId }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((_res) => {
+            window.location.href = "/";
+        });
+    }
+    </script>
+</html>
