@@ -3,8 +3,6 @@
 {% block title %}Home{% endblock %}
 
 {% block content %} 
-<h1>HOME PAGE</h1>
-
 
 <script>
     function deleteNote(noteId) {
@@ -33,12 +31,61 @@
 </ul>
 
 
-<form method="POST">
-    <textarea name="note" id="note" class="form-control" rows="3"></textarea>
-    <br />
-    <div align="center" class="mt-2">
-        <button type="submit" class="btn btn-primary">Add Note</button>
-    </div>
-</form>
+<form method="POST" enctype="multipart/form-data" class="d-flex align-items-center" style="gap: 0.5rem;">
+  <div class="input-group" style="border: 1px solid #ced4da; border-radius: 0.25rem; overflow: hidden; flex; flex-direction: column; gap: 10px; padding: 10px;">
+    <!-- for button -->
+    <style>
+        .btn-black {
+            background-color: black !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            width: 100%; /* Fully*/
+            transition: background-color 0.3s ease;
+        }
 
+        .btn-black:hover,
+        .btn-black:focus {
+            background-color: #808080 !important; /*  Darker when passing */
+            color: white !important;
+            outline: none;
+        }
+    </style>
+
+    <!-- + -->
+    <style>
+        #file-upload-label {
+            cursor: pointer;
+            font-size: 24px;
+            user-select: none;
+            margin-bottom: 0;
+            color: black;
+            transition: color 0.3s ease;
+        }
+        #file-upload-label:hover {
+            color: #808080;
+        }
+    </style>
+
+    <!-- Text-->
+    <textarea id="note" name="note" rows="2" placeholder="Write your complaints here..." 
+    class="form-control flex-grow-1" style="resize:none; min-height:50px; max-height:150px; overflow-y:auto; border: none; box-shadow: none;"></textarea>
+
+    <!-- Upload -->
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <label id="file-upload-label" for="file-upload" style="display: flex; justify-content: center; align-items: center;
+         width: 30px; height: 15px;
+         font-size: 30px; cursor: pointer;
+         margin-top: -5px;">+</label>
+        <input id="file-upload" name="file" type="file" style="display:none" multiple />
+    
+
+    <!-- Button -->
+    
+      <button type="submit" class=" btn-black"  style="padding: 6px 20px; font-size: 16px;" >Send</button>
+    </div>
+  </div>
+</form>
 {% endblock %}
