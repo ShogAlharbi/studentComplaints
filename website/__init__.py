@@ -19,10 +19,11 @@ def create_app():
 
     @Login_manager.user_loader
     def load_user(id):
+        from .models import User
         return User.query.get(int(id))
 
     #Blueprints login
-    from .models import User, Note
+    from .models import Note
     from .views import views
     from .auth import auth
 
@@ -32,10 +33,6 @@ def create_app():
     with app.app_context():
         db.create_all()
     create_database(app)
-
-    Login_manager= LoginManager()
-    Login_manager.login_view = 'auth.login'
-    Login_manager.init_app(app) 
        
     @Login_manager.user_loader
     def load_user(id):
