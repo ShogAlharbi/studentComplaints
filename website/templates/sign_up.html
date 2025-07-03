@@ -36,6 +36,16 @@
             name="password1" 
             style="font-size: 14px; padding-right: 35px; text-align: left; direction: ltr;"
             placeholder="{{ 'أدخل كلمة المرور' if lang == 'ar' else 'Enter password' }}"
+            oninput="toggleEyeVisibility('password1', 'eyeIcon1')"
+            onfocus="toggleEyeVisibility('password1', 'eyeIcon1')"
+            onblur="hideEyeIconIfEmpty('password1', 'eyeIcon1')"
+        />
+        <img
+                id="eyeIcon1"
+                src="{{ url_for('static', filename='images/eyeClose1.svg') }}"
+                alt="Toggle Password Visibility"
+                style="display:none; position: absolute; top: 75%; right: 10px; transform: translateY(-50%); cursor: pointer; width: 20px; height: 20px;"
+                onclick="togglePasswordVisibility('password1', 'eyeIcon1')"
             />
     </div>
         <div class="form-group" style="text-align: {{ 'right' if lang == 'ar' else 'left' }};">
@@ -47,6 +57,16 @@
             name="password2"
             style="font-size: 14px; padding-right: 35px; text-align: left; direction: ltr;"
             placeholder="{{ 'أعد تأكيد كلمة المرور' if lang == 'ar' else 'Confirm password' }}"
+            oninput="toggleEyeVisibility('password1', 'eyeIcon1')"
+            onfocus="toggleEyeVisibility('password1', 'eyeIcon1')"
+            onblur="hideEyeIconIfEmpty('password1', 'eyeIcon1')"
+        />
+            <img
+                id="eyeIcon1"
+                src="{{ url_for('static', filename='images/eyeClose1.svg') }}"
+                alt="Toggle Password Visibility"
+                style="display:none; position: absolute; top: 75%; right: 10px; transform: translateY(-50%); cursor: pointer; width: 20px; height: 20px;"
+                onclick="togglePasswordVisibility('password1', 'eyeIcon1')"
             />
     </div>
     <br />
