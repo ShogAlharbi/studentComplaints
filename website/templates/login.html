@@ -1,32 +1,47 @@
 {% extends "base.html" %}
 {% block title %}{{ 'تسجيل الدخول' if lang == 'ar' else 'Login' }}{% endblock %}
 
-
 {% block content %} 
 <form method="POST">
     <h3 class="d-flex justify-content-center">{{ 'تسجيل الدخول' if lang == 'ar' else 'Login' }}</h3>
-    <div class="form-group">
+    <div class="form-group" style="text-align: {{ 'right' if lang == 'ar' else 'left' }};">
         <label for="email">{{ 'البريد الإلكتروني' if lang == 'ar' else 'Email Address' }}</label></label>
         <input 
-            type="email" 
-            class="form-control" 
-            id="email" 
+            type="email"
+            class="form-control"
+            id="email"
             name="email"
-            style="font-size: 14px;"
+            style="font-size: 14px; padding-right: 35px; text-align: left; direction: ltr;"
+
             placeholder="{{ 'أدخل بريدك الإلكتروني' if lang == 'ar' else 'Enter email' }}"
-            />
+        />
     </div>
-    <div class="form-group">
+    <div class="form-group position-relative" style="text-align: {{ 'right' if lang == 'ar' else 'left' }};">
         <label for="password1">{{ 'كلمة المرور' if lang == 'ar' else 'Password' }}</label>
         <input 
             type="password" 
             class="form-control" 
             id="password1" 
             name="password1" 
-            style="font-size: 14px;"
+            style="font-size: 14px; padding-right: 35px; text-align: left; direction: ltr;"
+
             placeholder="{{ 'أدخل كلمة المرور' if lang == 'ar' else 'Enter password' }}"
-            />
-    <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
+            oninput="toggleEyeVisibility('password1', 'eyeIcon1')"
+            onfocus="toggleEyeVisibility('password1', 'eyeIcon1')"
+            onblur="hideEyeIconIfEmpty('password1', 'eyeIcon1')"
+        />
+        <img
+            id="eyeIcon1"
+            src="{{ url_for('static', filename='images/eyeClose1.svg') }}"
+            alt="Toggle Password Visibility"
+            style="display:none; position: absolute; top: 75%; right: 10px; transform: translateY(-50%); cursor: pointer; width: 20px; height: 20px;"
+            onclick="togglePasswordVisibility('password1', 'eyeIcon1')"
+        />
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="float: {{ 'left' if lang == 'ar' else 'right' }};">
+  {{ 'إرسال' if lang == 'ar' else 'Submit' }}
+</button>
+
 </form>
 {% endblock %}
